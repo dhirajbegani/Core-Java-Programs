@@ -1,112 +1,62 @@
 package core;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
-public class SerializationDemo implements Serializable {
+import org.junit.Test;
 
-	/**
-	 * 
-	 */
-	static final long serialVersionUID = -2564380081315815708L;
-	private int id;
-	private static int staticId = 300;
-	private transient int transientId;
-	private String name;
+public class SerializationDemo {
 
-	public SerializationDemo(int id, int transientId, String name) {
-		super();
-		this.id = id;
-		this.transientId = transientId;
-		this.name = name;
-	}
+	Object obj;
+	String fileName;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-		SerializationDemo obj = new SerializationDemo(100, 200, "Dhiraj");
-		String fileName = "serializaitionFile.txt";
-		try {
-			
-			FileOutputStream file = new FileOutputStream(fileName);
-			ObjectOutputStream out = new ObjectOutputStream(file);
-			
+	public boolean writeObject(Object obj, String fileName) {
+		boolean writtenSuccessful = false;
+		if(obj!=null & fileName!=null) {
+		try (FileOutputStream file = new FileOutputStream(fileName);
+			ObjectOutputStream out = new ObjectOutputStream(file);) {
 			out.writeObject(obj);
-			out.close();
-			file.close();
-			
-			System.out.println("Obj is serialized");
-			System.out.println("Values when serializing Obj");
-			System.out.println(obj.toString());
-			
-			FileInputStream fileInput = new FileInputStream(fileName);
-			ObjectInputStream input = new ObjectInputStream(fileInput);
-			
-			SerializationDemo objNew = null;
-			
-			objNew = (SerializationDemo) input.readObject();
-			input.close();
-			fileInput.close();
-			
-			System.out.println("objNew is serialized");
-			System.out.println("Values after deserializing Obj");
-			System.out.println(objNew.toString());
-			
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			writtenSuccessful = true;
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		System.out.print("Given object is serialized\nValues when serializing Obj\n" + obj);
+		}
+		return writtenSuccessful;
 	}
 
-	@Override
-	public String toString() {
-		return "SerializationDemo [id=" + id + ", transientId=" + transientId + ", name=" + name + ", staticId="+ staticId + "]";
+	public boolean readObject(Object obj, String fileName) {
+		boolean readSuccessful = false;
+		if(obj!=null & fileName!=null) {
+		try (FileInputStream fileInput = new FileInputStream(fileName);
+			 ObjectInputStream input = new ObjectInputStream(fileInput);) {
+			obj = input.readObject();
+			readSuccessful=true;
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		System.out.println("\nGiven object is deserialized\nValues after deserializing Obj\n" + obj);
+		}
+		return readSuccessful;
 	}
 
-	public int getId() {
-		return id;
+	@Test
+	public void test1WriteScenario() {
+		SerializationDemo demo = new SerializationDemo();
+		demo.obj = new DataModel(100, 200, "Dhiraj");
+		demo.fileName = "serializaitionFile.txt";
+		assertTrue(demo.writeObject(demo.obj, demo.fileName));
 	}
-
-	public void setId(int id) {
-		this.id = id;
+	
+	@Test
+	public void test2ReadScenario() {
+		SerializationDemo demo = new SerializationDemo();
+		demo.fileName = "serializaitionFile.txt";
+		assertTrue(demo.readObject(new DataModel(), demo.fileName));
 	}
-
-	public static int getStaticId() {
-		return staticId;
-	}
-
-	public static void setStaticId(int staticId) {
-		SerializationDemo.staticId = staticId;
-	}
-
-	public int getTransientId() {
-		return transientId;
-	}
-
-	public void setTransientId(int transientId) {
-		this.transientId = transientId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 }
