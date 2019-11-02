@@ -34,7 +34,7 @@ public class MapVsFlatMapDemo {
 		listOfIntegerList.add(Arrays.asList(3, 4));
 		listOfIntegerList.add(Arrays.asList(7, 8));
 
-		List<Integer> listOfInteger = getListOfIntFromListOfListUsingFlatMap(listOfIntegerList);
+		List<Integer> listOfInteger = getListOfIntFromListOfListUsingFlatMap(listOfIntegerList).stream().sorted().collect(Collectors.toList());
 		System.out.println(listOfInteger);
 		assertEquals(8, listOfInteger.size());
 	}
