@@ -8,7 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ArrayListDemo {
+public class ArrayListDemo {	
 
 	List<String> stringList = new ArrayList<>();
 
@@ -58,7 +58,7 @@ public class ArrayListDemo {
 		System.out.println("Array List with duplicates ");
 		System.out.println(obj.stringList);
 
-		Set<String> stringListWithoutDuplicates = new LinkedHashSet<String>(obj.stringList);
+		Set<String> stringListWithoutDuplicates = new LinkedHashSet<>(obj.stringList);
 		
 		System.out.println("Array List without duplicates (Ordering guranteed as LinkedHashSet is used)");
 		System.out.println(stringListWithoutDuplicates);
