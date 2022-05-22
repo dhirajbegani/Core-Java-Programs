@@ -6,10 +6,27 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+
 public class SerializationDemo {
 
 	Object obj;
 	String fileName;
+	
+	public Object getObj() {
+		return obj;
+	}
+
+	public void setObj(Object obj) {
+		this.obj = obj;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 
 	public boolean writeObject(Object obj, String fileName) {
 		boolean writtenSuccessful = false;
