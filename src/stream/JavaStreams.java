@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.IntSummaryStatistics;
 import java.util.List;
-import java.util.stream.Collector;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -94,6 +96,49 @@ public class JavaStreams {
         System.out.println("There are total " + goodRows + " good rows.");
         rows.close();
         
-        }
+        
+		//10. Read rows from CSV file and parse data from rows
+		System.out.println("10. Read rows from CSV file and parse data from rows");
+		
+		Stream <String> rows1 = Files.lines(Paths.get("data.csv"));
+		
+		rows1
+		     .map(x -> x.split(","))
+		     .filter(x -> x.length == 3)
+		     .filter(x -> Integer.parseInt(x[1]) >= 15)
+		     .forEach(x -> System.out.println(x[0] + " " + x[1]+ " "+x[2]));
+        
+		rows1.close();
+
+		//11. Read rows from CSV file and store in Hash Map
+		System.out.println("11. Read rows from CSV file and store in Hash Map");
+		
+		Stream <String> rows2 =  Files.lines(Paths.get("data.csv"));
+		Map <String, Integer> map = new HashMap<>();
+		map = rows2
+			     .map(x -> x.split(","))
+			     .filter(x -> x.length ==3)
+			     .filter(x -> Integer.parseInt(x[1]) >= 15)
+			     .collect(Collectors.toMap(x -> x[0], x-> Integer.parseInt(x[1])));
+		
+		rows2.close();
+		map.forEach((k,v) -> System.out.println("Key = " + k + " Value = " + v));
+		
+
+		//12. Reduction to use sum for other than Integer
+		System.out.println("12. Reduction to use sum for other than Integer");
+		
+		double total = Stream.of(7.8, 8.9, 10.11, 12.34)
+				             .reduce(0.0, (Double a, Double b) -> a+b);
+		System.out.println("Total = " + total);
+
+		//13. Reduce - IntSummary Statistics, work on Integer Stream only    
+		System.out.println("13. Reduce - IntSummary Statistics, work on Integer Stream only");		
+		IntSummaryStatistics summary = IntStream.of(4, 8, 16, 72).summaryStatistics();		
+		System.out.println(summary);
+		
+
+		
+		}
 				
 }
